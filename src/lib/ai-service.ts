@@ -273,12 +273,15 @@ function getModel(config: AIServiceConfig): LanguageModel {
 
   if (config.customEndpoint) {
     // For custom endpoints (Ollama/LM Studio/vLLM etc.) use OpenAI SDK with custom baseURL
+    // @ai-sdk/openai v2 : `openai(model)` appelle /responses (nouvelle API d'OpenAI), que
+    // les serveurs compatibles (Ollama, LM Studio, vLLM, KoboldCpp, Bifrost) n'ont pas → 404
+    // « Not Found ». `openai.chat(model)` appelle /chat/completions, qu'ils ont tous.
     const openai = createOpenAI({
       apiKey: config.apiKey || "",
       baseURL: config.customEndpoint,
-    }) as unknown as (model: string) => LanguageModel;
+    });
     const chosen = config.customModel ?? modelName;
-    return openai(chosen);
+    return openai.chat(chosen) as unknown as LanguageModel;
   }
 
   switch (config.providerNpm) {
