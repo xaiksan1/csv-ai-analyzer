@@ -2,6 +2,7 @@
 
 import { Sparkles, Database, ChevronDown, Github } from "lucide-react";
 import { FileUpload } from "../FileUpload";
+import { CsvLibrary } from "../CsvLibrary";
 import { APIKeyButton } from "../APIKeySettings";
 import { CSVSettingsButton } from "../CSVSettings";
 import { SAMPLE_DATASETS } from "~/lib/sample-data";
@@ -97,6 +98,9 @@ export function Hero({
             currentFileName={currentFileName}
             onClear={onClearFile}
           />
+
+          {/* Bibliothèque d'Alexandria : choisir un CSV au lieu de le glisser */}
+          {!currentFileName && <CsvLibrary onFileLoaded={onFileLoaded} />}
 
           {/* Sample Data Loader */}
           <div className="animate-fade-in mt-6 flex items-center justify-center gap-3">
